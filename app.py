@@ -40,11 +40,9 @@ if "answers" not in st.session_state:
 
 if st.session_state.question_idx < len(questions_df):
 
-
-current = questions_df.iloc[
-    st.session_state.question_idx
-]
-
+    current = questions_df.iloc[
+        st.session_state.question_idx
+    ]
 # 질문
 st.markdown(
     f"""

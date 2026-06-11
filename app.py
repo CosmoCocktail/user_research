@@ -46,7 +46,7 @@ if st.session_state.page == "home":
 
     st.write("")
 
-    st.image(img, caption='단체컷.png', use_column_width=True)
+    st.image("단체컷.png", caption='단체컷.png', use_column_width=True)
 
     if st.button(
         "시작하기",

@@ -98,18 +98,16 @@ RESULT_INFO = {
 
 
 if "page" not in st.session_state:
-st.session_state.page = "home"
+    st.session_state.page = "home"
 
 if "current_question" not in st.session_state:
-st.session_state.current_question = 0
+    st.session_state.current_question = 0
 
 if "result_saved" not in st.session_state:
-st.session_state.result_saved = False
+    st.session_state.result_saved = False
 
 if "scores" not in st.session_state:
-
-
-st.session_state.scores = {
+    st.session_state.scores = {
 
     "에디": 0,
     "뽀로로": 0,
@@ -121,7 +119,6 @@ st.session_state.scores = {
 
 
 # 함수
-
 
 def save_result(result):
 

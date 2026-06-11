@@ -184,3 +184,4 @@ if st.button(
     st.session_state.scores = {}
 
     st.rerun()
+'''

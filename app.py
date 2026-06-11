@@ -46,13 +46,7 @@ if st.session_state.page == "home":
 
     st.write("")
 
-    st.info("단체컷.png")
-# 이미지 불러오기
-img = Image.open('단체컷.png')
-
-# 화면에 출력
     st.image(img, caption='단체컷.png', use_column_width=True)
-    st.write("")
 
     if st.button(
         "시작하기",

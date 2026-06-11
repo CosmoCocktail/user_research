@@ -20,15 +20,15 @@ if not os.path.exists(QUESTION_FILE):
 if not os.path.exists(RESULT_FILE):
     init_df = pd.DataFrame(
     columns=["Result"]
-    )
-    
-    init_df.to_excel(
+)
+
+init_df.to_excel(
     RESULT_FILE,
     index=False
-    )
+)
 
 questions_df = pd.read_excel(
-    QUESTION_FILE
+QUESTION_FILE
 )
 
 
@@ -62,11 +62,8 @@ st.write("")
 
 if st.button(
     "시작하기",
-    use_container_width=True
-):
-
+    use_container_width=True):
     st.session_state.page = "question"
-
     st.rerun()
 
 elif st.session_state.page == "question":
@@ -93,8 +90,7 @@ elif st.session_state.page == "question":
         if st.button(
         current["답변A"],
         use_container_width=True
-    ):
-            choose(
+    ): choose(
             current["답변A_유형"],
             int(current["답변A_가중치"])
         )
@@ -103,9 +99,7 @@ elif st.session_state.page == "question":
         if st.button(
         current["답변B"],
         use_container_width=True
-    ):
-
-            choose(
+    ): choose(
             current["답변B_유형"],
             int(current["답변B_가중치"])
         )
@@ -119,7 +113,7 @@ elif st.session_state.page == "question":
     /
 
     len(questions_df)
-        
+
 )
 elif st.session_state.page == "result":
     result = max(
@@ -127,15 +121,6 @@ elif st.session_state.page == "result":
     key=st.session_state.scores.get
 )
 
-if not st.session_state.result_saved:
-
-    save_result(result)
-
-    st.session_state.result_saved = True
-
-same_count, total_count = get_statistics(
-    result
-)
 st.markdown(
     f"""
     <h1 style='text-align:center'>
@@ -153,27 +138,11 @@ st.info(
 
 st.write("")
 
-st.markdown(
-    f"""
-    <h3 style='text-align:center'>
-    {same_count}명이
-    당신과 같은
-    {result}
-    유형입니다.
-    </h3>
-    """,
-    unsafe_allow_html=True
-)
-
-st.write(
-    f"전체 참여자 수 : {total_count}명"
-)
 
 if st.button(
     "다시하기",
     use_container_width=True
 ):
-
     st.session_state.page = "home"
 
     st.session_state.question_idx = 0

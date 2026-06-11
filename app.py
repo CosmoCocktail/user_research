@@ -243,6 +243,7 @@ st.progress(
 
 
 else:
+
 result = max(
     st.session_state.scores,
     key=st.session_state.scores.get

@@ -136,7 +136,7 @@ if not st.session_state.result_saved:
 same_count, total_count = get_statistics(
     result
 )
-
+'''
 st.markdown(
     f"""
     <h1 style='text-align:center'>
@@ -147,7 +147,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-'''
+
 st.info(
     f"{result} 결과 이미지 영역"
 )

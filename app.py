@@ -64,11 +64,11 @@ elif st.session_state.page == "question":
         st.session_state.question_idx
     ]
 
-answers = [
-    current["답변A"],
-    current["답변B"]
-]
-random.shuffle(answers)
+    answers = [
+        current["답변A"],
+        current["답변B"]
+    ]
+    random.shuffle(answers)
 
     st.markdown(
         f"""

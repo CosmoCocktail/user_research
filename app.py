@@ -23,9 +23,7 @@ layout="centered"
 EXCEL_FILE = "result_database.xlsx"
 
 if not os.path.exists(EXCEL_FILE):
-
-```
-init_df = pd.DataFrame(
+    init_df = pd.DataFrame(
     columns=["Result"]
 )
 

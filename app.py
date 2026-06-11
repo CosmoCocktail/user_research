@@ -34,7 +34,6 @@ init_df.to_excel(
 # 질문 데이터
 QUESTIONS = [
 
-```
 {
     "question": "당신은 팀플에서 어떤 사람입니까?",
     "image": None,
@@ -64,7 +63,6 @@ QUESTIONS = [
         }
     ]
 }
-```
 
 ]
 
@@ -75,7 +73,6 @@ QUESTIONS = [
 # =====================
 
 RESULT_INFO = {
-
 
 "에디":
     "분석적이고 계획적인 발명가형",

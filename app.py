@@ -19,7 +19,7 @@ layout="centered"
 # 결과 저장 파일
 
 # =====================
-
+'''
 EXCEL_FILE = "result_database.xlsx"
 
 if not os.path.exists(EXCEL_FILE):
@@ -31,6 +31,7 @@ init_df.to_excel(
     EXCEL_FILE,
     index=False
 )
+'''
 # 질문 데이터
 QUESTIONS = [
 

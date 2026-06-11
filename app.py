@@ -22,6 +22,9 @@ questions_df = pd.read_excel(
 
 if "page" not in st.session_state:
     st.session_state.page = "home"
+    
+if "question_idx" not in st.session_state:
+    st.session_state.question_idx = 0
 
 # ======================
 # 시작 페이지

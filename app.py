@@ -29,10 +29,9 @@ if not os.path.exists(QUESTION_FILE):
 
 if not os.path.exists(RESULT_FILE):
     init_df = pd.DataFrame(
-    columns=["Result"]
-)
-
-init_df.to_excel(
+    columns=["Result"])
+    
+    init_df.to_excel(
     RESULT_FILE,
     index=False
 )

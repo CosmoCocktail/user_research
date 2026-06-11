@@ -39,7 +39,7 @@ if len(df) > 0:
     counts = (
         df["Result"]
         .value_counts()
-        .reindex(["A", "B", "C", "D", "E"], fill_value=0)
+        .reindex(["에디", "크롱", "뽀로로", "포비", "루피"], fill_value=0)
     )
 
     st.subheader("누적 통계")

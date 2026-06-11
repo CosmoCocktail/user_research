@@ -17,16 +17,6 @@ if not os.path.exists(QUESTION_FILE):
     st.error("questions.xlsx 파일이 없습니다.")
     st.stop()
 
-if not os.path.exists(RESULT_FILE):
-    init_df = pd.DataFrame(
-    columns=["Result"]
-)
-
-init_df.to_excel(
-    RESULT_FILE,
-    index=False
-)
-
 questions_df = pd.read_excel(
 QUESTION_FILE
 )

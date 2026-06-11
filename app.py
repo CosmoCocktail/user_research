@@ -54,6 +54,7 @@ if st.session_state.page == "home":
         st.rerun()
 
 # ======================
+st.write(st.session_state)
 elif st.session_state.page == "question":
 
     current = questions_df.iloc[

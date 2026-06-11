@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import random
 
 # ======================
 # 페이지 설정
@@ -63,6 +64,12 @@ elif st.session_state.page == "question":
         st.session_state.question_idx
     ]
 
+answers = [
+    current["답변A"],
+    current["답변B"]
+]
+random.shuffle(answers)
+
     st.markdown(
         f"""
         <h2 style='text-align:center'>
@@ -82,25 +89,21 @@ elif st.session_state.page == "question":
 
     with col1:
 
-        if st.button(
-            current["답변A"],
-            use_container_width=True
-        ):
+    if st.button(
+        answers[0],
+        use_container_width=True
+    ):
+        st.session_state.question_idx += 1
+        st.rerun()
 
-            st.session_state.question_idx += 1
+with col2:
 
-            st.rerun()
-
-    with col2:
-
-        if st.button(
-            current["답변B"],
-            use_container_width=True
-        ):
-
-            st.session_state.question_idx += 1
-
-            st.rerun()
+    if st.button(
+        answers[1],
+        use_container_width=True
+    ):
+        st.session_state.question_idx += 1
+        st.rerun()
 
 elif st.session_state.page == "question":
 

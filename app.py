@@ -95,15 +95,10 @@ if "scores" not in st.session_state:
 # -------------------
 
 def select_answer(score_data):
-
-```
-for character, score in score_data.items():
+    for character, score in score_data.items():
     st.session_state.scores[character] += score
-
-st.session_state.current_question += 1
-
-st.rerun()
-```
+    st.session_state.current_question += 1
+    st.rerun()
 
 # -------------------
 

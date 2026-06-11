@@ -94,7 +94,7 @@ elif st.session_state.page == "question":
         current["답변A"],
         use_container_width=True
     ):
-        choose(
+            choose(
             current["답변A_유형"],
             int(current["답변A_가중치"])
         )
@@ -105,7 +105,7 @@ elif st.session_state.page == "question":
         use_container_width=True
     ):
 
-        choose(
+            choose(
             current["답변B_유형"],
             int(current["답변B_가중치"])
         )

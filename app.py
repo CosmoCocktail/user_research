@@ -10,13 +10,13 @@ layout="centered"
 # 세션 상태 초기화
 
 if "page" not in st.session_state:
-st.session_state.page = "home"
+    st.session_state.page = "home"
 
 # 시작하기 버튼 클릭 시
 
 def start_test():
-st.session_state.page = "question"
-st.rerun()
+    st.session_state.page = "question"
+    st.rerun()
 
 # 초기 화면
 

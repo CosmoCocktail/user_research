@@ -139,14 +139,14 @@ df.to_excel(
 
 def get_statistics(result):
     df = pd.read_excel(EXCEL_FILE)
-
-total_count = len(df)
-
-same_type_count = len(
-    df[df["Result"] == result]
-)
-
-return same_type_count, total_count
+    
+    total_count = len(df)
+    
+    same_type_count = len(
+        df[df["Result"] == result]
+    )
+    
+    return same_type_count, total_count
 
 def start_test():
     st.session_state.page = "question"
@@ -235,16 +235,21 @@ st.progress(
         st.session_state.current_question + 1
     )
     / len(QUESTIONS)
-)
+    )
 
 
 # 결과 페이지
 
+if st.session_state.current_question < len(QUESTIONS):
+    with col2:
+        if st.button(
+            q["answers"][1]["text"],
+            use_container_width=True
+        ):
+            select_answer(q["answers"][1]["score"])
 
-
-else:
-
-result = max(
+    st.progress((st.session_state.current_question + 1) / len(QUESTIONS))
+else:result = max(
     st.session_state.scores,
     key=st.session_state.scores.get
 )

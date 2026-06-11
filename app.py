@@ -119,7 +119,8 @@ elif st.session_state.page == "question":
     /
 
     len(questions_df)
-
+        
+''''
 )
 elif st.session_state.page == "result":
     result = max(
@@ -136,7 +137,6 @@ if not st.session_state.result_saved:
 same_count, total_count = get_statistics(
     result
 )
-'''
 st.markdown(
     f"""
     <h1 style='text-align:center'>

@@ -77,10 +77,10 @@ QUESTIONS = [
 # -------------------
 
 if "current_question" not in st.session_state:
-st.session_state.current_question = 0
+    st.session_state.current_question = 0
 
 if "scores" not in st.session_state:
-st.session_state.scores = {
+    st.session_state.scores = {
 "에디": 0,
 "뽀로로": 0,
 "크롱": 0,

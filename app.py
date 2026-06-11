@@ -96,9 +96,9 @@ if "scores" not in st.session_state:
 
 def select_answer(score_data):
     for character, score in score_data.items():
-    st.session_state.scores[character] += score
-    st.session_state.current_question += 1
-    st.rerun()
+st.session_state.scores[character] += score
+st.session_state.current_question += 1
+st.rerun()
 
 # -------------------
 
@@ -107,9 +107,8 @@ def select_answer(score_data):
 # -------------------
 
 if st.session_state.current_question >= len(QUESTIONS):
-
-```
-result = max(
+    
+    result = max(
     st.session_state.scores,
     key=st.session_state.scores.get
 )
@@ -197,5 +196,247 @@ st.progress(
     (st.session_state.current_question + 1)
     / len(QUESTIONS)
 )
+```
+import pandas as pd
+import os
+import streamlit as st
+
+# -------------------
+
+# 통계 저장 파일
+
+# -------------------
+
+EXCEL_FILE = "result_database.xlsx"
+
+# 최초 생성
+
+if not os.path.exists(EXCEL_FILE):
+
+```
+init_df = pd.DataFrame(
+    columns=["Result"]
+)
+
+init_df.to_excel(
+    EXCEL_FILE,
+    index=False
+)
+```
+
+# -------------------
+
+# 결과 저장 함수
+
+# -------------------
+
+def save_result(result):
+
+```
+df = pd.read_excel(EXCEL_FILE)
+
+new_row = pd.DataFrame(
+    {"Result": [result]}
+)
+
+df = pd.concat(
+    [df, new_row],
+    ignore_index=True
+)
+
+df.to_excel(
+    EXCEL_FILE,
+    index=False
+)
+```
+
+# -------------------
+
+# 통계 조회 함수
+
+# -------------------
+
+def get_statistics(result):
+
+```
+df = pd.read_excel(EXCEL_FILE)
+
+total_count = len(df)
+
+same_type_count = len(
+    df[df["Result"] == result]
+)
+
+ratio = 0
+
+if total_count > 0:
+
+    ratio = round(
+        same_type_count
+        / total_count
+        * 100,
+        1
+    )
+
+return (
+    same_type_count,
+    total_count,
+    ratio
+)
+```
+
+# -------------------
+
+# 결과 설명 데이터
+
+# -------------------
+
+RESULT_INFO = {
+
+```
+"에디": {
+    "image": "images/eddy.png",
+    "description": """
+    분석적이고 계획적인 발명가형.
+    문제 해결을 즐기며 체계적으로 움직입니다.
+    """
+},
+
+"뽀로로": {
+    "image": "images/pororo.png",
+    "description": """
+    호기심이 많고 도전을 즐기는 모험가형.
+    새로운 경험을 좋아합니다.
+    """
+},
+
+"크롱": {
+    "image": "images/crong.png",
+    "description": """
+    에너지가 넘치고 솔직한 행동파.
+    감정 표현이 풍부합니다.
+    """
+},
+
+"포비": {
+    "image": "images/poby.png",
+    "description": """
+    배려심이 깊고 든든한 지원자형.
+    협력을 중요하게 생각합니다.
+    """
+},
+
+"루피": {
+    "image": "images/loopy.png",
+    "description": """
+    감수성이 풍부하고 공감 능력이 높은 유형.
+    관계를 중요하게 생각합니다.
+    """
+}
+```
+
+}
+
+# -------------------
+
+# 결과 페이지
+
+# -------------------
+
+result = max(
+st.session_state.scores,
+key=st.session_state.scores.get
+)
+
+# 중복 저장 방지
+
+if "result_saved" not in st.session_state:
+
+```
+save_result(result)
+
+st.session_state.result_saved = True
+```
+
+same_count, total_count, ratio = get_statistics(result)
+
+# 상단
+
+st.markdown(
+f""" <h1 style='text-align:center'>
+당신의 유형은 {result}입니다. </h1>
+""",
+unsafe_allow_html=True
+)
+
+st.write("")
+
+# 중간 이미지
+
+col1, col2, col3 = st.columns([1, 3, 1])
+
+with col2:
+
+```
+st.image(
+    RESULT_INFO[result]["image"],
+    use_container_width=True
+)
+```
+
+# 결과 설명
+
+st.markdown(
+f""" <div style='text-align:center;
+             font-size:20px;
+             padding:20px;'>
+{RESULT_INFO[result]["description"]} </div>
+""",
+unsafe_allow_html=True
+)
+
+st.write("")
+st.divider()
+
+# 하단 통계
+
+st.markdown(
+f""" <h3 style='text-align:center'>
+현재까지 총 {same_count}명이
+당신과 같은 {result} 유형으로
+판별되었습니다. </h3>
+""",
+unsafe_allow_html=True
+)
+
+st.markdown(
+f""" <p style='text-align:center'>
+전체 참여자 {total_count}명 중
+{ratio}%에 해당합니다. </p>
+""",
+unsafe_allow_html=True
+)
+
+# 다시하기
+
+if st.button(
+"다시 검사하기",
+use_container_width=True
+):
+
+```
+st.session_state.current_question = 0
+
+st.session_state.result_saved = False
+
+st.session_state.scores = {
+    "에디": 0,
+    "뽀로로": 0,
+    "크롱": 0,
+    "포비": 0,
+    "루피": 0
+}
+
+st.rerun()
 ```
 

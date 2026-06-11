@@ -120,7 +120,6 @@ elif st.session_state.page == "question":
 
     len(questions_df)
         
-''''
 )
 elif st.session_state.page == "result":
     result = max(
@@ -184,4 +183,3 @@ if st.button(
     st.session_state.scores = {}
 
     st.rerun()
-'''

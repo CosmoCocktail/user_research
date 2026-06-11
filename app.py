@@ -12,32 +12,6 @@ st.set_page_config(
     layout="centered"
 )
 
-CHARACTERS = {
-
-    "에디": 0,
-    "크롱": 0,
-    "뽀로로": 0,
-    "포비": 0,
-    "루피": 0
-
-}
-if "scores" not in st.session_state:
-
-    st.session_state.scores = CHARACTERS.copy()
-
-RESULT_FILE = "result_database.xlsx"
-
-if not os.path.exists(RESULT_FILE):
-    pd.DataFrame(columns=["Result"]).to_excel(RESULT_FILE,index=False)
-
-
-def choose(answer_type, weight):
-
-    if answer_type in st.session_state.scores:
-
-        st.session_state.scores[
-            answer_type
-        ] += weight
 # ======================
 # 세션 초기화
 # ======================
@@ -136,12 +110,3 @@ elif st.session_state.page == "question":
     st.success("모든 질문이 종료되었습니다.")
 
     st.write("다음 단계에서 결과 페이지를 연결합니다.")
-
-result_code = max(
-    st.session_state.scores,
-    key=st.session_state.scores.get
-)
-
-result_name = CHARACTERS[
-    result_code
-]["name"]

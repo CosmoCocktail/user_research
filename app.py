@@ -188,7 +188,7 @@ if st.button(
 # 질문 페이지
 
 
-elif (st.session_state.page == "question"andst.session_state.current_question < len(QUESTIONS)):
+elif st.session_state.page == "question" and st.session_state.current_question < len(QUESTIONS):
     q = QUESTIONS[
     st.session_state.current_question
 ]

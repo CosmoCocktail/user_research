@@ -40,6 +40,26 @@ if "answers" not in st.session_state:
     st.session_state.answers = []
 
 # 질문 종료 여부 확인
+if st.session_state.page == "home":
+
+    st.markdown(
+        "<h1 style='text-align:center'>당신은 어떤 뽀로로입니까?</h1>",
+        unsafe_allow_html=True
+    )
+
+    st.info("이미지 영역")
+
+    if st.button("시작하기"):
+        st.session_state.page = "question"
+        st.rerun()
+
+elif (
+    st.session_state.page == "question"
+    and
+    st.session_state.question_idx < len(QUESTIONS)
+):
+
+    q = QUESTIONS[st.session_state.question_idx]
 
 if st.session_state.question_idx < len(questions_df):
 

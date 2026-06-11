@@ -51,7 +51,7 @@ if st.session_state.page == "home":
 img = Image.open('단체컷.png')
 
 # 화면에 출력
-st.image(img, caption='단체컷.png', use_column_width=True)
+    st.image(img, caption='단체컷.png', use_column_width=True)
     st.write("")
 
     if st.button(

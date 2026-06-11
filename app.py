@@ -87,23 +87,23 @@ elif st.session_state.page == "question":
 
     col1, col2 = st.columns(2)
 
-with col1:
+    with col1:
 
-    if st.button(
-        answers[0],
-        use_container_width=True
-    ):
-        st.session_state.question_idx += 1
-        st.rerun()
+        if st.button(
+            answers[0],
+            use_container_width=True
+        ):
+            st.session_state.question_idx += 1
+            st.rerun()
 
-with col2:
+    with col2:
 
-    if st.button(
-        answers[1],
-        use_container_width=True
-    ):
-        st.session_state.question_idx += 1
-        st.rerun()
+        if st.button(
+            answers[1],
+            use_container_width=True
+        ):
+            st.session_state.question_idx += 1
+            st.rerun()
 
 elif st.session_state.page == "question":
 

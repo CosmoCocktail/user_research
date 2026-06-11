@@ -147,7 +147,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
+'''
 st.info(
     f"{result} 결과 이미지 영역"
 )

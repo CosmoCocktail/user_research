@@ -121,11 +121,8 @@ if "scores" not in st.session_state:
 # 함수
 
 def save_result(result):
-
-
-df = pd.read_excel(EXCEL_FILE)
-
-new_row = pd.DataFrame(
+    df = pd.read_excel(EXCEL_FILE)
+    new_row = pd.DataFrame(
     {"Result": [result]}
 )
 
@@ -141,9 +138,7 @@ df.to_excel(
 
 
 def get_statistics(result):
-
-
-df = pd.read_excel(EXCEL_FILE)
+    df = pd.read_excel(EXCEL_FILE)
 
 total_count = len(df)
 
@@ -154,23 +149,15 @@ same_type_count = len(
 return same_type_count, total_count
 
 def start_test():
-
-
-st.session_state.page = "question"
-
+    st.session_state.page = "question"
 st.rerun()
 
 
 def select_answer(score_data):
-
-
-for character, score in score_data.items():
-
-    st.session_state.scores[character] += score
-
-st.session_state.current_question += 1
-
-st.rerun()
+    for character, score in score_data.items():
+        st.session_state.scores[character] += score
+        st.session_state.current_question += 1
+        st.rerun()
 
 
 # =====================
@@ -180,9 +167,7 @@ st.rerun()
 # =====================
 
 if st.session_state.page == "home":
-
-
-st.markdown(
+    st.markdown(
     "<h1 style='text-align:center;'>당신은 어떤 뽀로로입니까?</h1>",
     unsafe_allow_html=True
 )

@@ -44,7 +44,7 @@ if st.session_state.page == "home":
 
     st.write("")
 
-    st.info("이미지 삽입 영역")
+    st.info("단체컷.png")
 
     st.write("")
 

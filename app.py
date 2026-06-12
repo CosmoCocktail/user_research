@@ -360,6 +360,23 @@ elif st.session_state.page == "result":
 
     # 참여 통계
 
+    st.markdown("<div class='stat-box'>", unsafe_allow_html=True)
+    st.markdown(
+        "<div style='text-align:center;font-size:1rem;color:#444;margin-bottom:.5rem'>"
+        "지금까지 이 테스트에 참여한 인원</div>",
+        unsafe_allow_html=True
+    )
+    st.markdown(f"<div class='stat-total'>총 {total}명</div>", unsafe_allow_html=True)
+    st.write("")
+ 
+    count = counts.get(character, 0)
+    pct   = round(count / total * 100, 1) if total > 0 else 0.0
+    st.markdown(
+        f"<div style='text-align:center;font-size:1.1rem;margin-top:.5rem'>"
+        f"<b>{pct}%</b> 의 인원이 <b>{character}</b> 를 선택했습니다. ({count}명)"
+        f"</div>",
+        unsafe_allow_html=True
+    )
     count = counts.get(character, 0)
     pct   = round(count / total * 100, 1) if total > 0 else 0.0
     st.markdown(

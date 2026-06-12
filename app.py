@@ -265,12 +265,7 @@ elif st.session_state.page == "tiebreak":
     tied     = st.session_state.tied_chars
     tied_str = ", ".join(tied)
 
-    # 동점 캐릭터 태그 표시
-    tags_html = " ".join([
-        "<span class='char-tag' style='background:" + CHAR_INFO[c]["color"] + ";color:#fff'>"
-        + CHAR_INFO[c]["emoji"] + " " + c + "</span>"
-        for c in tied if c in CHAR_INFO
-    ])
+
     st.markdown(
         f"<div style='text-align:center;margin-bottom:.5rem'>{tags_html}</div>",
         unsafe_allow_html=True

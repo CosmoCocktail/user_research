@@ -4,6 +4,8 @@ import re
 import os
 import random
 import base64
+import io
+from PIL import Image, ImageDraw, ImageFont
 from openpyxl import load_workbook, Workbook
 
 # ======================
@@ -293,28 +295,111 @@ elif st.session_state.page == "result":
     st.markdown("<div class='big-title'>🎉 결과 발표!</div>", unsafe_allow_html=True)
     st.write("")
 
-    # 결과 캐릭터 이미지 (루피.png / 크롱.png / 에디.png / 뽀로로.png / 포비.png)
-    img_path = f"result_page/{character}.png"
+    # 결과 캐릭터 이미지
+    img_path = f"{character}.png"
     if os.path.exists(img_path):
         show_image(img_path)
     else:
         st.info(f"📁 이미지 파일 미등록: {character}.png")
 
     st.markdown(
-        f"<div class='res-char'>당신은 <span style='color:#3355ff'>{character}</span>입니다!</div>",
+        f"<div class='res-char'>당신은 <span style='color:#1A7FD4'>{character}</span>입니다!</div>",
         unsafe_allow_html=True
     )
     st.write("")
 
-    # 참여 통계 — 비율만 표시 (인원수 제거)
+    # 참여 통계
     count = counts.get(character, 0)
     pct   = round(count / total * 100, 1) if total > 0 else 0.0
     st.markdown(f"""
     <div class='stat-box'>
-        <div style='font-size:1rem;color:#444;margin-bottom:.4rem'>지금까지 이 테스트에 참여한 인원</div>
+        <div style='font-size:1rem;color:#444;margin-bottom:0.4rem'>지금까지 이 테스트에 참여한 인원</div>
         <div class='stat-pct'><b>{pct}%</b> 의 인원이 <b>{character}</b> 를 선택했습니다.</div>
     </div>
     """, unsafe_allow_html=True)
+    st.write("")
+
+    # ======================
+    # 이미지 다운로드
+    # ======================
+    def make_share_image(char, img_file):
+        W, H = 800, 900
+        bg_color = (26, 127, 212)   # #1A7FD4
+
+        canvas = Image.new("RGB", (W, H), bg_color)
+        draw   = ImageDraw.Draw(canvas)
+
+        # 캐릭터 이미지 합성
+        if os.path.exists(img_file):
+            try:
+                char_img = Image.open(img_file).convert("RGBA")
+                char_img.thumbnail((600, 600))
+                cx = (W - char_img.width) // 2
+                canvas.paste(char_img, (cx, 80), char_img)
+            except Exception:
+                pass
+
+        # 텍스트 오버레이 (기본 폰트)
+        try:
+            font_lg = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 52)
+            font_sm = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 34)
+        except Exception:
+            font_lg = ImageFont.load_default()
+            font_sm = font_lg
+
+        title = "Team Play Villains Test"
+        result_text = f"You are [ {char} ]!"
+        sub_text    = f"{pct}% of participants chose {char}"
+
+        # 텍스트 중앙 정렬
+        for txt, fnt, y, color in [
+            (title,       font_sm, 710, (255, 255, 255, 180)),
+            (result_text, font_lg, 760, (255, 255, 255, 255)),
+            (sub_text,    font_sm, 840, (220, 240, 255, 200)),
+        ]:
+            bbox = draw.textbbox((0, 0), txt, font=fnt)
+            x = (W - (bbox[2] - bbox[0])) // 2
+            draw.text((x, y), txt, font=fnt, fill=color)
+
+        buf = io.BytesIO()
+        canvas.save(buf, format="PNG")
+        buf.seek(0)
+        return buf
+
+    dl_buf = make_share_image(character, img_path)
+    st.download_button(
+        label="⬇️ 결과 이미지 저장",
+        data=dl_buf,
+        file_name=f"팀플빌런즈_{character}.png",
+        mime="image/png",
+        use_container_width=True,
+    )
+    st.write("")
+
+    # ======================
+    # URL 공유
+    # ======================
+    try:
+        host = st.context.headers.get("host", "")
+        share_url = ("https://" + host) if host else "https://your-app-url.streamlit.app"
+    except Exception:
+        share_url = "https://your-app-url.streamlit.app"
+
+    tweet_text = ("나는 팀플 빌런즈에서 [" + character + "] 유형! 너는? 👉 " + share_url).replace(" ", "%20")
+
+    share_html = (
+        "<div style='display:flex;gap:10px;justify-content:center;flex-wrap:wrap;'>"
+        + "<a href='https://story.kakao.com/share?url=" + share_url + "' target='_blank' style='text-decoration:none;'>"
+        + "<button style='background:#FEE500;color:#3C1E1E;border:none;border-radius:10px;padding:10px 22px;font-size:0.95rem;font-weight:700;cursor:pointer;'>💬 카카오 공유</button></a>"
+        + "<a href='https://twitter.com/intent/tweet?text=" + tweet_text + "' target='_blank' style='text-decoration:none;'>"
+        + "<button style='background:#000;color:#fff;border:none;border-radius:10px;padding:10px 22px;font-size:0.95rem;font-weight:700;cursor:pointer;'>𝕏 트위터 공유</button></a>"
+        + "</div>"
+    )
+    st.markdown(share_html, unsafe_allow_html=True)
+    st.write("")
+
+    st.markdown("<div style='text-align:center;font-size:0.9rem;color:#888;'>🔗 링크 복사</div>", unsafe_allow_html=True)
+    st.code(share_url, language=None)
     st.write("")
 
     if st.button("🔄 다시하기", use_container_width=True):

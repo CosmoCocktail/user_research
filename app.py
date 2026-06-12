@@ -97,8 +97,9 @@ def evaluate_and_route():
         finalize(top[0])
     else:
         st.session_state.tied_chars = top
-        st.session_state.tb_order   = None   # 재셔플 허용
+        st.session_state.tb_order   = None
         st.session_state.page       = "tiebreak"
+    st.rerun()
 
 def finalize(character: str):
     st.session_state.result_character = character
@@ -175,10 +176,9 @@ elif st.session_state.page == "question":
     total = len(questions_df)
     idx   = st.session_state.question_idx
 
-    # 모든 질문 완료 → 점수 평가
+    # 모든 질문 완료 → 점수 평가 (rerun은 evaluate_and_route 내부에서 처리)
     if idx >= total:
         evaluate_and_route()
-        st.rerun()
 
     row = questions_df.iloc[idx]
 
@@ -256,6 +256,11 @@ elif st.session_state.page == "tiebreak":
 # 결과 페이지
 # ══════════════════════════════════════════
 elif st.session_state.page == "result":
+
+    # result_character가 None이면 홈으로 복귀 (비정상 진입 방어)
+    if not st.session_state.result_character:
+        st.session_state.page = "home"
+        st.rerun()
 
     character     = st.session_state.result_character
     counts, total = load_result_counts()

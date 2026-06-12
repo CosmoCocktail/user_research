@@ -4,6 +4,8 @@ import random
 from PIL import Image
 
 
+
+
 # ======================
 # 페이지 설정
 # ======================

@@ -26,12 +26,12 @@ CHARACTERS    = ["에디", "크롱", "뽀로로", "루피", "포비"]
 # 동점 캐릭터에 해당하는 답변만 선택지로 표시
 # ======================
 TIEBREAK_QUESTION = {
-    "질문": "마지막으로, 팀플이 끝나고 뒤풀이 자리에서 나는?",
-    "에디":   "\"이번 프로젝트 아쉬웠던 점 복기해야 해. 다음엔 더 잘할 수 있어.\"",
-    "크롱":   "\"드디어 끝났다! 오늘은 그냥 신나게 놀자 🎉\"",
-    "뽀로로": "\"야, 우리 이 팀으로 다음에도 또 하자! 진짜 재밌었어!\"",
-    "루피":   "\"수고했어. 다음 프로젝트 일정 미리 잡아두는 게 좋겠지?\"",
-    "포비":   "\"다들 힘들었지? 고생했어. 맛있는 거 많이 먹어!\"",
+    "질문": "주제를 정하는데 의견이 갈린다면?",
+    "에디":   "\"잠깐, 지금 의견 말고 나 완전 좋은 생각 났어.\"",
+    "크롱":   "\"다 괜찮은 것 같은데…\"",
+    "뽀로로": "\"제일 재밌어 보이는 거 하면 안 돼?\"",
+    "루피":   "\"일단 기준부터 정하고 제일 괜찮은 안으로 가자.\"",
+    "포비":   "\"다들 말해봐. 내가 의견을 정리해볼게.\"",
 }
 
 # ======================
@@ -39,7 +39,14 @@ TIEBREAK_QUESTION = {
 # ======================
 @st.cache_data
 def load_questions():
-    return pd.read_excel(QUESTION_FILE)
+    df = pd.read_excel(QUESTION_FILE)
+    # 질문 또는 답변이 비어있는 행 제거
+    df = df.dropna(subset=["질문", "답변A", "답변B"])
+    df = df[df["질문"].astype(str).str.strip() != ""]
+    df = df[df["답변A"].astype(str).str.strip().str.lower() != "nan"]
+    df = df[df["답변B"].astype(str).str.strip().str.lower() != "nan"]
+    df = df.reset_index(drop=True)
+    return df
 
 questions_df = load_questions()
 
@@ -176,9 +183,10 @@ elif st.session_state.page == "question":
     total = len(questions_df)
     idx   = st.session_state.question_idx
 
-    # 모든 질문 완료 → 점수 평가 (rerun은 evaluate_and_route 내부에서 처리)
+    # 모든 질문 완료 → 점수 평가 후 즉시 중단 (하위 코드 실행 방지)
     if idx >= total:
         evaluate_and_route()
+        st.stop()
 
     row = questions_df.iloc[idx]
 
@@ -187,8 +195,15 @@ elif st.session_state.page == "question":
     st.progress(idx / total)
     st.write("")
 
-    # 질문 텍스트
-    st.markdown(f"<div class='q-text'>{row['질문']}</div>", unsafe_allow_html=True)
+    # 질문 번호 + 이미지 중앙 출력
+    img_path = f"question{idx+1}.png"
+    if os.path.exists(img_path):
+        col_l, col_c, col_r = st.columns([1, 3, 1])
+        with col_c:
+            st.image(img_path, use_container_width=True)
+    else:
+        # 이미지 없을 때 질문 텍스트로 대체
+        st.markdown(f"<div class='q-text'>{row['질문']}</div>", unsafe_allow_html=True)
     st.write("")
 
     # A/B 답변 — 리렌더링 시 순서 유지, 값 전부 str/int 강제 변환

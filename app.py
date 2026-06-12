@@ -332,7 +332,7 @@ elif st.session_state.page == "result":
     pct   = round(count / total * 100, 1) if total > 0 else 0.0
     st.markdown(
         f"<div style='text-align:center;font-size:1.1rem;margin-top:.5rem'>"
-        f"<b>{pct}%</b> 의 인원이 <b>{character}</b> 를 선택했습니다. ({count}명)"
+        f"<b>{pct}%</b> 의 인원이 <b>{character}</b> 를 선택했습니다."
         f"</div>",
         unsafe_allow_html=True
     )

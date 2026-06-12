@@ -227,14 +227,15 @@ elif st.session_state.page == "question":
     st.progress(idx / total)
     st.write("")
 
+    # 질문 텍스트 (엑셀 질문 항목) — 이미지 위에 항상 출력
+    st.markdown(f"<div class='q-text'>{row['질문']}</div>", unsafe_allow_html=True)
+
     # 질문 이미지 중앙 출력 (question1.png ~ question11.png)
     img_path = f"question{idx+1}.png"
     if os.path.exists(img_path):
         col_l, col_c, col_r = st.columns([1, 3, 1])
         with col_c:
             st.image(img_path, use_container_width=True)
-    else:
-        st.markdown(f"<div class='q-text'>{row['질문']}</div>", unsafe_allow_html=True)
     st.write("")
 
     # A/B 답변 — 리렌더링 시 순서 유지

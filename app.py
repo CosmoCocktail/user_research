@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import ast
@@ -26,7 +25,6 @@ CHARACTERS    = ["에디", "크롱", "뽀로로", "루피", "포비"]
 # 동점 추가 질문
 # 동점 캐릭터에 해당하는 답변만 선택지로 표시
 # ======================
-
 TIEBREAK_QUESTION = {
     "질문": "마지막으로, 팀플이 끝나고 뒤풀이 자리에서 나는?",
     "에디":   "\"이번 프로젝트 아쉬웠던 점 복기해야 해. 다음엔 더 잘할 수 있어.\"",
@@ -197,8 +195,8 @@ elif st.session_state.page == "question":
     order_key = f"q_order_{idx}"
     if order_key not in st.session_state:
         opts = [
-            ("A", str(row["답변A"]),  str(row["답변A_유형"]), int(row["답변A_점수"])),
-            ("B", str(row["답변B"]),  str(row["답변B_유형"]), int(row["답변B_점수"])),
+            ("A", str(row["답변A"]),  str(row["답변A_유형"]), int(float(row["답변A_점수"])) if str(row["답변A_점수"]) not in ("", "nan") else 2),
+            ("B", str(row["답변B"]),  str(row["답변B_유형"]), int(float(row["답변B_점수"])) if str(row["답변B_점수"]) not in ("", "nan") else 2),
         ]
         random.shuffle(opts)
         st.session_state[order_key] = opts
@@ -217,11 +215,11 @@ elif st.session_state.page == "question":
                 st.session_state.question_idx += 1
                 st.rerun()
 
+
 # ══════════════════════════════════════════
 # 동점 추가 질문 페이지
 # 동점 캐릭터에 해당하는 답변만 선택지로 표시
 # ══════════════════════════════════════════
-
 elif st.session_state.page == "tiebreak":
 
     tied     = st.session_state.tied_chars
@@ -253,7 +251,8 @@ elif st.session_state.page == "tiebreak":
                 finalize(char)
                 st.rerun()
 
-# ═════════════════════════════════════════
+
+# ══════════════════════════════════════════
 # 결과 페이지
 # ══════════════════════════════════════════
 elif st.session_state.page == "result":

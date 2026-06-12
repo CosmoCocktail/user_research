@@ -215,7 +215,6 @@ elif st.session_state.page == "question":
                         st.session_state.scores[char] += score
                 st.session_state.question_idx += 1
                 st.rerun()
-'''
 
 # ══════════════════════════════════════════
 # 동점 추가 질문 페이지
@@ -256,7 +255,7 @@ elif st.session_state.page == "tiebreak":
 # 결과 페이지
 # ══════════════════════════════════════════
 elif st.session_state.page == "result":
-'''
+
     character     = st.session_state.result_character
     counts, total = load_result_counts()
 

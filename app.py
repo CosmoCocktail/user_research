@@ -251,13 +251,12 @@ elif st.session_state.page == "tiebreak":
             if st.button(text, use_container_width=True, key=f"tb_{char}"):
                 finalize(char)
                 st.rerun()
-'''
 
 # ══════════════════════════════════════════
 # 결과 페이지
 # ══════════════════════════════════════════
 elif st.session_state.page == "result":
-
+'''
     character     = st.session_state.result_character
     counts, total = load_result_counts()
 

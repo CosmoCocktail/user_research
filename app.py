@@ -160,24 +160,23 @@ st.markdown(f"""<style>
     html, body, [class*="css"], .stMarkdown, .stButton button {{
         font-family: {FONT_FAMILY};
     }}
-    /* ── 공통 ── */
+
     .big-title {{ text-align:center; font-size:2rem; font-weight:800; margin-bottom:.5rem; }}
     .sub-title {{ text-align:center; font-size:1.1rem; color:#666; margin-bottom:1.5rem; }}
     .res-char  {{ text-align:center; font-size:2.4rem; font-weight:900; margin:1rem 0; }}
     .stat-box  {{ background:#f0f4ff; border-radius:12px; padding:1.2rem; margin-top:1rem; text-align:center; }}
     .stat-pct  {{ font-size:1.2rem; margin-top:.5rem; }}
 
-    /* ── 질문 페이지 전용 색상 (#1A7FD4 계열) ── */
     .q-text    {{ text-align:center; font-size:1.35rem; font-weight:700;
-                 margin-bottom:1.2rem; line-height:1.5; color:#1A7FD4; }}
-    .prog-text {{ text-align:center; font-size:.9rem; color:#1A7FD4; margin-bottom:.4rem; }}
+                 margin-bottom:1.2rem; line-height:1.5; color:#FFFFFF; }}
+    .prog-text {{ text-align:center; font-size:.9rem; color:#FFFFFF; margin-bottom:.4rem; }}
 
-    /* 진행 바 색상 */
+
     .stProgress > div > div > div > div {{
         background-color: #1A7FD4;
     }}
 
-    /* 답변 버튼 색상 */
+
     div[data-testid="stHorizontalBlock"] .stButton button {{
         background-color: #1A7FD4;
         color: #ffffff;

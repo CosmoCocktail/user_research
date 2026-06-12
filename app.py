@@ -154,39 +154,28 @@ if os.path.exists(BG_IMAGE_FILE):
     }}
     </style>""", unsafe_allow_html=True)
 
-_font_import = f"@import url('{FONT_IMPORT_URL}');" if FONT_IMPORT_URL else ""
-_css = """
-    {font_import}
-    html, body, [class*="css"], .stMarkdown, .stButton button {{
-        font-family: {font_family};
-    }}
-    .big-title {{ text-align:center; font-size:2rem; font-weight:800; margin-bottom:0.5rem; }}
-    .sub-title {{ text-align:center; font-size:1.1rem; color:#666; margin-bottom:1.5rem; }}
-    .res-char  {{ text-align:center; font-size:2.4rem; font-weight:900; margin:1rem 0; }}
-    .stat-box  {{ background:#f0f4ff; border-radius:12px; padding:1.2rem; margin-top:1rem; text-align:center; }}
-    .stat-pct  {{ font-size:1.2rem; margin-top:0.5rem; }}
-    .q-text    {{ text-align:center; font-size:1.35rem; font-weight:700;
-                 margin-bottom:1.2rem; line-height:1.5; color:#1A7FD4; }}
-    .prog-text {{ text-align:center; font-size:0.9rem; color:#1A7FD4; margin-bottom:0.4rem; }}
-    .stProgress > div > div > div > div {{
-        background-color: #1A7FD4;
-    }}
-    div[data-testid="stHorizontalBlock"] .stButton button {{
-        background-color: #1A7FD4;
-        color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        font-weight: 700;
-    }}
-    div[data-testid="stHorizontalBlock"] .stButton button:hover {{
-        background-color: #155FA0;
-        color: #ffffff;
-    }}
-    .tie-badge {{ display:inline-block; background:#1A7FD4; color:#fff;
-                 border-radius:20px; padding:4px 18px; font-size:0.9rem; margin-bottom:1rem; }}
-""".format(font_import=_font_import, font_family=FONT_FAMILY)
+_font_import = ("@import url('" + FONT_IMPORT_URL + "');" ) if FONT_IMPORT_URL else ""
 
-st.markdown(f"<style>{_css}</style>", unsafe_allow_html=True)
+_css_parts = [
+    "<style>",
+    _font_import,
+    "html, body, [class*='css'], .stMarkdown, .stButton button {",
+    "    font-family: " + FONT_FAMILY + ";",
+    "}",
+    ".big-title  { text-align:center; font-size:2rem; font-weight:800; margin-bottom:0.5rem; }",
+    ".sub-title  { text-align:center; font-size:1.1rem; color:#666; margin-bottom:1.5rem; }",
+    ".res-char   { text-align:center; font-size:2.4rem; font-weight:900; margin:1rem 0; }",
+    ".stat-box   { background:#f0f4ff; border-radius:12px; padding:1.2rem; margin-top:1rem; text-align:center; }",
+    ".stat-pct   { font-size:1.2rem; margin-top:0.5rem; }",
+    ".q-text     { text-align:center; font-size:1.35rem; font-weight:700; margin-bottom:1.2rem; line-height:1.5; color:#1A7FD4; }",
+    ".prog-text  { text-align:center; font-size:0.9rem; color:#1A7FD4; margin-bottom:0.4rem; }",
+    ".stProgress > div > div > div > div { background-color: #1A7FD4; }",
+    "div[data-testid='stHorizontalBlock'] .stButton button { background-color:#1A7FD4; color:#fff; border:none; border-radius:10px; font-weight:700; }",
+    "div[data-testid='stHorizontalBlock'] .stButton button:hover { background-color:#155FA0; color:#fff; }",
+    ".tie-badge  { display:inline-block; background:#1A7FD4; color:#fff; border-radius:20px; padding:4px 18px; font-size:0.9rem; margin-bottom:1rem; }",
+    "</style>",
+]
+st.markdown("\n".join(_css_parts), unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════

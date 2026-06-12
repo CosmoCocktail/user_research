@@ -145,7 +145,7 @@ def reset_session():
 # 스타일 — 배경 / 폰트
 # ======================
 if os.path.exists(BG_IMAGE_FILE):
-    bg_b64 = base64.b64encode(open(BG_IMAGE_FILE, "rb").read()).decode()
+    bg_b64 = base64.b64encode(open(background, "rb").read()).decode()
     st.markdown(f"""<style>
     .stApp {{
         background-image: url("data:image/png;base64,{bg_b64}");

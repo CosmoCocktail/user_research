@@ -4,8 +4,6 @@ import re
 import os
 import random
 import base64
-import io
-from PIL import Image, ImageDraw, ImageFont
 from openpyxl import load_workbook, Workbook
 
 # ======================

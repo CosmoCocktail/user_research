@@ -160,8 +160,8 @@ st.markdown("""
 # ══════════════════════════════════════════
 if st.session_state.page == "home":
 
-    st.markdown("<div class='big-title'>팀플 빌런즈</div>", unsafe_allow_html=True)
-    st.markdown("<div class='sub-title'>눈 속 마을 빌런 테스트</div>", unsafe_allow_html=True)
+    st.markdown("<div class='big-title'>팀플 빌런즈:kissing_heart:</div>", unsafe_allow_html=True)
+    st.markdown("<div class='sub-title'>:snowflake:눈 속 마을 빌런 테스트:snowflake:</div>", unsafe_allow_html=True)
 
     if os.path.exists("단체컷.png"):
         st.image("단체컷.png", use_container_width=True)
@@ -288,10 +288,17 @@ elif st.session_state.page == "result":
     st.markdown("<div class='big-title'>🎉 결과 발표!</div>", unsafe_allow_html=True)
     st.write("")
 
-    # 결과 캐릭터 이미지
+    # 결과 캐릭터 이미지 (파일명: 변수명.png — 루피.png / 크롱.png / 에디.png / 뽀로로.png / 포비.png)
     img_path = f"{character}.png"
     if os.path.exists(img_path):
-        st.image(img_path, use_container_width=True)
+        try:
+            col_l, col_c, col_r = st.columns([1, 3, 1])
+            with col_c:
+                st.image(img_path, use_container_width=True)
+        except Exception:
+            pass
+    else:
+        st.info(f"📁 이미지 파일 미등록: {character}.png")
 
     st.markdown(
         f"<div class='res-char'>당신은 <span style='color:#3355ff'>{character}</span>입니다!</div>",

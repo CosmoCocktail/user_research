@@ -360,7 +360,6 @@ elif st.session_state.page == "result":
 
     st.markdown("**캐릭터별 결과 분포**")
     for char in CHARACTERS:
-        cinfo = CHAR_INFO.get(char, {})
         count = counts.get(char, 0)
         pct   = round(count / total * 100, 1) if total > 0 else 0.0
         st.markdown(

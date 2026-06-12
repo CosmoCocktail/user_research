@@ -215,7 +215,7 @@ elif st.session_state.page == "question":
                         st.session_state.scores[char] += score
                 st.session_state.question_idx += 1
                 st.rerun()
-
+'''
 
 # ══════════════════════════════════════════
 # 동점 추가 질문 페이지
@@ -251,7 +251,7 @@ elif st.session_state.page == "tiebreak":
             if st.button(text, use_container_width=True, key=f"tb_{char}"):
                 finalize(char)
                 st.rerun()
-
+'''
 
 # ══════════════════════════════════════════
 # 결과 페이지

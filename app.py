@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import ast
@@ -191,11 +192,13 @@ elif st.session_state.page == "question":
     st.markdown(f"<div class='q-text'>{row['질문']}</div>", unsafe_allow_html=True)
     st.write("")
 
-    # A/B 답변 — 리렌더링 시 순서 유지
+    # A/B 답변 — 리렌더링 시 순서 유지, 값 전부 str/int 강제 변환
     order_key = f"q_order_{idx}"
     if order_key not in st.session_state:
-        opts = [("A", row["답변A"], row["답변A_유형"], row["답변A_점수"]),
-                ("B", row["답변B"], row["답변B_유형"], row["답변B_점수"])]
+        opts = [
+            ("A", str(row["답변A"]),  str(row["답변A_유형"]), int(row["답변A_점수"])),
+            ("B", str(row["답변B"]),  str(row["답변B_유형"]), int(row["답변B_점수"])),
+        ]
         random.shuffle(opts)
         st.session_state[order_key] = opts
     opts = st.session_state[order_key]
@@ -203,6 +206,9 @@ elif st.session_state.page == "question":
     col1, col2 = st.columns(2)
     for col, (label, text, types_str, score) in zip([col1, col2], opts):
         with col:
+            # NaN/빈값 방어
+            if not text or text.strip() in ("", "nan"):
+                continue
             if st.button(text, use_container_width=True, key=f"q{idx}_{label}"):
                 for char in parse_types(types_str):
                     if char in st.session_state.scores:

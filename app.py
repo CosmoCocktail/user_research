@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import ast
 import os
-from datetime import datetime
 from openpyxl import load_workbook, Workbook
 
 # ======================
@@ -19,7 +18,7 @@ st.set_page_config(
 # ======================
 QUESTION_FILE = "questions.xlsx"
 RESULT_FILE = "result.xlsx"
-CHARACTERS = ["루피", "에디", "포비", "크롱", "뽀로로"]
+CHARACTERS = ["에디", "크롱", "뽀로로", "루피", "포비"]
 
 # ======================
 # 데이터 로드
@@ -35,33 +34,57 @@ questions_df = load_questions()
 # result.xlsx 저장 함수
 # ======================
 def save_result(character: str):
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    """
+    result.xlsx 구조 (단일 행 누적):
+    행1 헤더: 에디 | 크롱 | 뽀로로 | 루피 | 포비
+    행2 값  :  3  |  5  |   2   |  7  |  4
 
+    참여 완료 시 결과 캐릭터 열의 값 +1 갱신
+    """
     if os.path.exists(RESULT_FILE):
         wb = load_workbook(RESULT_FILE)
         ws = wb.active
+
+        # 헤더 행에서 캐릭터 열 위치 파악
+        header = [cell.value for cell in ws[1]]
+
+        if character in header:
+            col_idx = header.index(character) + 1  # openpyxl은 1-based
+            current_val = ws.cell(row=2, column=col_idx).value or 0
+            ws.cell(row=2, column=col_idx).value = current_val + 1
+        
     else:
+        # 파일 없으면 헤더 + 초기값 행 생성
         wb = Workbook()
         ws = wb.active
-        ws.append(["timestamp", "result"])
+        ws.append(CHARACTERS)                          # 행1: 헤더 (캐릭터명)
+        init_row = [1 if c == character else 0 for c in CHARACTERS]
+        ws.append(init_row)                            # 행2: 누적 카운트
 
-    ws.append([now, character])
     wb.save(RESULT_FILE)
 
 # ======================
 # result.xlsx 집계 함수
 # ======================
 def load_result_counts():
+    """
+    행2의 각 캐릭터 카운트 값을 읽어
+    - counts: {캐릭터: 카운트}
+    - total: 전체 합계 (= 총 참여자 수)
+    반환
+    """
     if not os.path.exists(RESULT_FILE):
         return {c: 0 for c in CHARACTERS}, 0
 
-    df = pd.read_excel(RESULT_FILE)
+    df = pd.read_excel(RESULT_FILE, header=0)
 
-    if "result" not in df.columns:
+    # 열 이름이 CHARACTERS와 일치하는지 확인
+    if not all(c in df.columns for c in CHARACTERS):
         return {c: 0 for c in CHARACTERS}, 0
 
-    total = len(df)
-    counts = {c: int((df["result"] == c).sum()) for c in CHARACTERS}
+    # 첫 번째 데이터 행(행2)에서 카운트 읽기
+    counts = {c: int(df[c].iloc[0]) for c in CHARACTERS}
+    total = sum(counts.values())
     return counts, total
 
 # ======================
@@ -269,12 +292,12 @@ elif st.session_state.page == "result":
     st.markdown(f"<div class='stat-total'>총 {total}명</div>", unsafe_allow_html=True)
     st.write("")
 
-    # 캐릭터별 결과 분포
+    # 캐릭터별 결과 분포 — "XX%의 인원이 {캐릭터}를 선택했습니다"
     st.markdown("**캐릭터별 결과 분포**")
     for char in CHARACTERS:
         count = counts.get(char, 0)
-        pct = round(count / total * 100, 1) if total > 0 else 0
-        st.write(f"{char}: {count}명 ({pct}%)")
+        pct = round(count / total * 100, 1) if total > 0 else 0.0
+        st.write(f"**{pct}%** 의 인원이 **{char}** 를 선택했습니다. ({count}명)")
 
     st.markdown("</div>", unsafe_allow_html=True)
 

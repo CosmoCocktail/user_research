@@ -237,7 +237,7 @@ elif st.session_state.page == "question":
     st.markdown(f"<div class='q-text'>{row['질문']}</div>", unsafe_allow_html=True)
 
     # 질문 이미지 중앙 출력 (question1.png ~ question11.png)
-    img_path = f"/{질문이미지}/question.{idx+1}.png"
+    img_path = f"질문 이미지/question.{idx+1}.png"
     if os.path.exists(img_path):
         try:
             col_l, col_c, col_r = st.columns([1, 3, 1])

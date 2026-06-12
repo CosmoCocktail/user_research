@@ -146,16 +146,16 @@ def reset_session():
 # ======================
 if os.path.exists(BG_IMAGE_FILE):
     bg_b64 = base64.b64encode(open(BG_IMAGE_FILE, "rb").read()).decode()
-    st.markdown(f"""<style>
+    st.markdown(f""<style>
     .stApp {{
         background-image: url("data:image/png;base64,{bg_b64}");
         background-size: cover; background-position: center;
         background-repeat: no-repeat; background-attachment: fixed;
     }}
-    </style>""", unsafe_allow_html=True)
+    </style>, unsafe_allow_html=True)
 
 _font_import = f"@import url('{FONT_IMPORT_URL}');" if FONT_IMPORT_URL else ""
-st.markdown(f"""<style>
+st.markdown(f""<style>
     {_font_import}
     html, body, [class*="css"], .stMarkdown, .stButton button {{
         font-family: {FONT_FAMILY};
@@ -192,7 +192,7 @@ st.markdown(f"""<style>
     /* 동점 배지 */
     .tie-badge {{ display:inline-block; background:#1A7FD4; color:#fff;
                  border-radius:20px; padding:4px 18px; font-size:.9rem; margin-bottom:1rem; }}
-</style>""", unsafe_allow_html=True)
+</style>, unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════

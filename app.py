@@ -160,8 +160,8 @@ st.markdown("""
 # ══════════════════════════════════════════
 if st.session_state.page == "home":
 
-    st.markdown("<div class='big-title'>팀플 빌런즈:kissing_heart:</div>", unsafe_allow_html=True)
-    st.markdown("<div class='sub-title'>:snowflake:눈 속 마을 빌런 테스트:snowflake:</div>", unsafe_allow_html=True)
+    st.markdown("<div class='big-title'>팀플 빌런즈</div>", unsafe_allow_html=True)
+    st.markdown("<div class='sub-title'>눈 속 마을 빌런 테스트</div>", unsafe_allow_html=True)
 
     if os.path.exists("단체컷.png"):
         st.image("단체컷.png", use_container_width=True)
@@ -239,8 +239,20 @@ elif st.session_state.page == "question":
 # ══════════════════════════════════════════
 elif st.session_state.page == "tiebreak":
 
-    tied     = st.session_state.tied_chars
-    tied_str = ", ".join(tied)
+    tied = st.session_state.tied_chars
+
+    # 동점 캐릭터 중 TIEBREAK_QUESTION에 답변이 있는 캐릭터만 추출
+    valid_tied = [c for c in tied if c in TIEBREAK_QUESTION]
+
+    # 유효한 동점 캐릭터가 없으면 → 그냥 첫 번째 캐릭터로 확정
+    if not valid_tied:
+        finalize(tied[0])
+        st.rerun()
+
+    # 유효 캐릭터가 1명이면 → 추가 질문 없이 바로 확정
+    if len(valid_tied) == 1:
+        finalize(valid_tied[0])
+        st.rerun()
 
     st.markdown(
         f"<div style='text-align:center'>"
@@ -257,9 +269,9 @@ elif st.session_state.page == "tiebreak":
     )
     st.write("")
 
-    # 동점 캐릭터 답변만 선택지 표시, 순서 고정
+    # 동점 캐릭터에 해당하는 답변만 선택지 표시, 순서 고정
     if st.session_state.tb_order is None:
-        opts = [(char, TIEBREAK_QUESTION[char]) for char in tied if char in TIEBREAK_QUESTION]
+        opts = [(char, TIEBREAK_QUESTION[char]) for char in valid_tied]
         random.shuffle(opts)
         st.session_state.tb_order = opts
     opts = st.session_state.tb_order
@@ -316,11 +328,14 @@ elif st.session_state.page == "result":
     st.markdown(f"<div class='stat-total'>총 {total}명</div>", unsafe_allow_html=True)
     st.write("")
 
-    st.markdown("**캐릭터별 결과 분포**")
-    for char in CHARACTERS:
-        count = counts.get(char, 0)
-        pct   = round(count / total * 100, 1) if total > 0 else 0.0
-        st.write(f"**{pct}%** 의 인원이 **{char}** 를 선택했습니다. ({count}명)")
+    count = counts.get(character, 0)
+    pct   = round(count / total * 100, 1) if total > 0 else 0.0
+    st.markdown(
+        f"<div style='text-align:center;font-size:1.1rem;margin-top:.5rem'>"
+        f"<b>{pct}%</b> 의 인원이 <b>{character}</b> 를 선택했습니다. ({count}명)"
+        f"</div>",
+        unsafe_allow_html=True
+    )
 
     st.markdown("</div>", unsafe_allow_html=True)
     st.write("")

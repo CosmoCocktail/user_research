@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+import random
+from PIL import Image
+
 
 # ======================
 # 페이지 설정
@@ -14,17 +17,17 @@ st.set_page_config(
 # ======================
 # 세션 초기화
 # ======================
-
-RESULT_FILE = "result_database.xlsx"
 QUESTION_FILE = "questions.xlsx"
 
 questions_df = pd.read_excel(
     QUESTION_FILE
 )
 
-
 if "page" not in st.session_state:
     st.session_state.page = "home"
+    
+if "question_idx" not in st.session_state:
+    st.session_state.question_idx = 0
 
 # ======================
 # 시작 페이지
@@ -43,9 +46,7 @@ if st.session_state.page == "home":
 
     st.write("")
 
-    st.info("이미지 삽입 영역")
-
-    st.write("")
+    st.image("단체컷.png", use_column_width=True)
 
     if st.button(
         "시작하기",
@@ -62,6 +63,12 @@ elif st.session_state.page == "question":
     current = questions_df.iloc[
         st.session_state.question_idx
     ]
+
+    answers = [
+        current["답변A"],
+        current["답변B"]
+    ]
+    random.shuffle(answers)
 
     st.markdown(
         f"""
@@ -83,23 +90,19 @@ elif st.session_state.page == "question":
     with col1:
 
         if st.button(
-            current["답변A"],
+            answers[0],
             use_container_width=True
         ):
-
             st.session_state.question_idx += 1
-
             st.rerun()
 
     with col2:
 
         if st.button(
-            current["답변B"],
+            answers[1],
             use_container_width=True
         ):
-
             st.session_state.question_idx += 1
-
             st.rerun()
 
 elif st.session_state.page == "question":

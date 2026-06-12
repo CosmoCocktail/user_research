@@ -9,7 +9,7 @@ from PIL import Image
 # ======================
 
 st.set_page_config(
-    page_title="당신은 어떤 뽀로로입니까?",
+    page_title="<팀플 빌런즈 : 눈 속 마을 빌런 테스트>",
     page_icon="🐧",
     layout="centered"
 )

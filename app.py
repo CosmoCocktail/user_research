@@ -138,19 +138,59 @@ def reset_session():
             del st.session_state[k]
 
 # ======================
-# 공통 스타일
+# 배경 이미지 + 폰트 설정
+# [변경 방법]
+# 배경: BG_IMAGE_FILE 값을 원하는 파일명으로 변경
+# 구글폰트: FONT_IMPORT_URL 값을 원하는 폰트 URL로 변경
+#           구글 폰트 목록 → https://fonts.google.com/?subset=korean
+# 로컬폰트: FONT_IMPORT_URL = "" 로 비워두고
+#           FONT_FAMILY 를 @font-face 선언한 폰트명으로 변경
 # ======================
-st.markdown("""
+import base64
+
+BG_IMAGE_FILE  = "background.png"                 # ← 배경 이미지 파일명
+FONT_IMPORT_URL = "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap"  # ← 구글 폰트 URL
+FONT_FAMILY     = "'Noto Sans KR', sans-serif"    # ← 적용할 폰트명
+
+def get_base64_image(path: str) -> str:
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+# 배경 이미지 적용
+if os.path.exists(BG_IMAGE_FILE):
+    bg_base64 = get_base64_image(BG_IMAGE_FILE)
+    st.markdown(f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/png;base64,{bg_base64}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+
+# 폰트 + 공통 스타일 적용
+_font_import = f"@import url('{FONT_IMPORT_URL}');" if FONT_IMPORT_URL else ""
+
+st.markdown(f"""
 <style>
-    .big-title  { text-align:center; font-size:2rem; font-weight:800; margin-bottom:.5rem; }
-    .sub-title  { text-align:center; font-size:1.1rem; color:#666; margin-bottom:1.5rem; }
-    .q-text     { text-align:center; font-size:1.35rem; font-weight:700; margin-bottom:1.2rem; line-height:1.5; }
-    .prog-text  { text-align:center; font-size:.9rem; color:#888; margin-bottom:.4rem; }
-    .tie-badge  { display:inline-block; background:#ff6b35; color:#fff;
-                  border-radius:20px; padding:4px 18px; font-size:.9rem; margin-bottom:1rem; }
-    .res-char   { text-align:center; font-size:2.4rem; font-weight:900; margin:1rem 0; }
-    .stat-box   { background:#f0f4ff; border-radius:12px; padding:1.2rem; margin-top:1rem; }
-    .stat-total { text-align:center; font-size:1.6rem; font-weight:800; color:#3355ff; }
+    {_font_import}
+
+    html, body, [class*="css"], .stMarkdown, .stButton button {{
+        font-family: {FONT_FAMILY};
+    }}
+
+    .big-title  {{ text-align:center; font-size:2rem; font-weight:800; margin-bottom:.5rem; }}
+    .sub-title  {{ text-align:center; font-size:1.1rem; color:#666; margin-bottom:1.5rem; }}
+    .q-text     {{ text-align:center; font-size:1.35rem; font-weight:700; margin-bottom:1.2rem; line-height:1.5; }}
+    .prog-text  {{ text-align:center; font-size:.9rem; color:#888; margin-bottom:.4rem; }}
+    .tie-badge  {{ display:inline-block; background:#ff6b35; color:#fff;
+                  border-radius:20px; padding:4px 18px; font-size:.9rem; margin-bottom:1rem; }}
+    .res-char   {{ text-align:center; font-size:2.4rem; font-weight:900; margin:1rem 0; }}
+    .stat-box   {{ background:#f0f4ff; border-radius:12px; padding:1.2rem; margin-top:1rem; }}
+    .stat-total {{ text-align:center; font-size:1.6rem; font-weight:800; color:#3355ff; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -332,7 +372,7 @@ elif st.session_state.page == "result":
     pct   = round(count / total * 100, 1) if total > 0 else 0.0
     st.markdown(
         f"<div style='text-align:center;font-size:1.1rem;margin-top:.5rem'>"
-        f"<b>{pct}%</b> 의 인원이 <b>{character}</b> 를 선택했습니다."
+        f"<b>{pct}%</b> 의 인원이 <b>{character}</b> 를 선택했습니다. ({count}명)"
         f"</div>",
         unsafe_allow_html=True
     )

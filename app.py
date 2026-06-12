@@ -21,8 +21,6 @@ QUESTION_FILE = "questions.xlsx"
 RESULT_FILE   = "result.xlsx"
 CHARACTERS    = ["에디", "크롱", "뽀로로", "루피", "포비"]
 
-
-
 # ======================
 # 동점 추가 질문
 # 동점 캐릭터에 해당하는 답변만 선택지로 표시
@@ -153,8 +151,6 @@ st.markdown("""
     .res-char   { text-align:center; font-size:2.4rem; font-weight:900; margin:1rem 0; }
     .stat-box   { background:#f0f4ff; border-radius:12px; padding:1.2rem; margin-top:1rem; }
     .stat-total { text-align:center; font-size:1.6rem; font-weight:800; color:#3355ff; }
-    .char-tag   { display:inline-block; border-radius:14px; padding:3px 12px;
-                  font-size:.78rem; font-weight:700; margin-bottom:4px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -165,7 +161,7 @@ st.markdown("""
 if st.session_state.page == "home":
 
     st.markdown("<div class='big-title'>팀플 빌런즈</div>", unsafe_allow_html=True)
-    st.markdown("<div class='sub-title'> 눈 속 마을 빌런 테스트</div>", unsafe_allow_html=True)
+    st.markdown("<div class='sub-title'>눈 속 마을 빌런 테스트</div>", unsafe_allow_html=True)
 
     if os.path.exists("단체컷.png"):
         st.image("단체컷.png", use_container_width=True)
@@ -197,7 +193,7 @@ elif st.session_state.page == "question":
     st.progress(idx / total)
     st.write("")
 
-    # 질문 텍스트 (엑셀 질문 항목) — 이미지 위에 항상 출력
+    # 질문 텍스트 — 이미지 위에 항상 출력
     st.markdown(f"<div class='q-text'>{row['질문']}</div>", unsafe_allow_html=True)
 
     # 질문 이미지 중앙 출력 (question1.png ~ question11.png)
@@ -208,7 +204,7 @@ elif st.session_state.page == "question":
             with col_c:
                 st.image(img_path, use_container_width=True)
         except Exception:
-            pass  # 이미지 손상/형식 오류 시 텍스트만 표시
+            pass
     st.write("")
 
     # A/B 답변 — 리렌더링 시 순서 유지
@@ -224,30 +220,11 @@ elif st.session_state.page == "question":
         st.session_state[order_key] = opts
     opts = st.session_state[order_key]
 
-    # 각 답변에 해당하는 캐릭터 변수 태그 추출
-    def get_tags_html(types_str: str) -> str:
-        chars = parse_types(types_str)
-        tags  = []
-        for c in chars:
-            info  = CHAR_INFO.get(c, {})
-            color = info.get("color", "#888")
-            emoji = info.get("emoji", "")
-            tag   = info.get("tag", c)
-            tags.append(
-                f"<span class='char-tag' style='background:{color};color:#fff'>"
-                f"{emoji} {c} · {tag}</span>"
-            )
-        return " ".join(tags)
-
     col1, col2 = st.columns(2)
     for col, (label, text, types_str, score) in zip([col1, col2], opts):
         with col:
             if not text or text.strip() in ("", "nan"):
                 continue
-            # 캐릭터 변수 태그 표시
-            tags_html = get_tags_html(types_str)
-            st.markdown(f"<div style='text-align:center;margin-bottom:6px'>{tags_html}</div>",
-                        unsafe_allow_html=True)
             if st.button(text, use_container_width=True, key=f"q{idx}_{label}"):
                 for char in parse_types(types_str):
                     if char in st.session_state.scores:
@@ -265,11 +242,6 @@ elif st.session_state.page == "tiebreak":
     tied     = st.session_state.tied_chars
     tied_str = ", ".join(tied)
 
-
-    st.markdown(
-        f"<div style='text-align:center;margin-bottom:.5rem'>{tags_html}</div>",
-        unsafe_allow_html=True
-    )
     st.markdown(
         f"<div style='text-align:center'>"
         f"<span class='tie-badge'>⚖️ 두구두구! 마지막 질문</span>"
@@ -295,14 +267,6 @@ elif st.session_state.page == "tiebreak":
     col_list = st.columns(len(opts))
     for col, (char, text) in zip(col_list, opts):
         with col:
-            info = CHAR_INFO.get(char, {})
-            # 각 선택지 위에 해당 캐릭터 변수 태그 표시
-            st.markdown(
-                f"<div style='text-align:center;margin-bottom:6px'>"
-                f"<span class='char-tag' style='background:{info.get('color','#888')};color:#fff'>"
-                f"{info.get('emoji','')} {char} · {info.get('tag','')}</span></div>",
-                unsafe_allow_html=True
-            )
             if st.button(text, use_container_width=True, key=f"tb_{char}"):
                 finalize(char)
                 st.rerun()
@@ -313,13 +277,12 @@ elif st.session_state.page == "tiebreak":
 # ══════════════════════════════════════════
 elif st.session_state.page == "result":
 
-    # result_character가 None이면 홈으로 복귀 (비정상 진입 방어)
+    # result_character가 None이면 홈으로 복귀
     if not st.session_state.result_character:
         st.session_state.page = "home"
         st.rerun()
 
     character     = st.session_state.result_character
-    info          = CHAR_INFO.get(character, {})
     counts, total = load_result_counts()
 
     st.markdown("<div class='big-title'>🎉 결과 발표!</div>", unsafe_allow_html=True)
@@ -330,15 +293,8 @@ elif st.session_state.page == "result":
     if os.path.exists(img_path):
         st.image(img_path, use_container_width=True)
 
-    # 캐릭터 변수 태그
     st.markdown(
-        f"<div style='text-align:center;margin-bottom:.5rem'>"
-        f"<span class='char-tag' style='background:{info.get('color','#888')};color:#fff;font-size:1rem;padding:5px 18px'>"
-        f"{info.get('emoji','')} {character} · {info.get('tag','')}</span></div>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        f"<div class='res-char'>당신은 <span style='color:{info.get('color','#3355ff')}'>{character}</span>입니다!</div>",
+        f"<div class='res-char'>당신은 <span style='color:#3355ff'>{character}</span>입니다!</div>",
         unsafe_allow_html=True
     )
     st.write("")
@@ -357,12 +313,7 @@ elif st.session_state.page == "result":
     for char in CHARACTERS:
         count = counts.get(char, 0)
         pct   = round(count / total * 100, 1) if total > 0 else 0.0
-        st.markdown(
-            f"<span class='char-tag' style='background:{cinfo.get('color','#888')};color:#fff'>"
-            f"{cinfo.get('emoji','')} {char}</span> "
-            f"**{pct}%** 의 인원이 **{char}** 를 선택했습니다. ({count}명)",
-            unsafe_allow_html=True
-        )
+        st.write(f"**{pct}%** 의 인원이 **{char}** 를 선택했습니다. ({count}명)")
 
     st.markdown("</div>", unsafe_allow_html=True)
     st.write("")

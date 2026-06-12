@@ -18,12 +18,12 @@ st.set_page_config(
 # ======================
 # 상수
 # ======================
-QUESTION_FILE   = "questions.xlsx"
-RESULT_FILE     = "result.xlsx"
-CHARACTERS      = ["에디", "크롱", "뽀로로", "루피", "포비"]
-BG_IMAGE_FILE   = "background.png"
+QUESTION_FILE  = "questions.xlsx"
+RESULT_FILE    = "result.xlsx"
+CHARACTERS     = ["에디", "크롱", "뽀로로", "루피", "포비"]
+BG_IMAGE_FILE  = "background.png"
 FONT_IMPORT_URL = "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap"
-FONT_FAMILY     = "'Noto Sans KR', sans-serif"
+FONT_FAMILY    = "'Noto Sans KR', sans-serif"
 
 # ======================
 # 동점 추가 질문
@@ -55,6 +55,7 @@ questions_df = load_questions()
 # 유틸 함수
 # ======================
 def parse_types(type_str: str) -> list:
+    """'[루피, 에디]' 형태 문자열 → 캐릭터 리스트"""
     return [c for c in re.findall(r'[\w가-힣]+', str(type_str)) if c in CHARACTERS]
 
 def safe_score(val) -> int:
@@ -153,7 +154,7 @@ if os.path.exists(BG_IMAGE_FILE):
     }}
     </style>""", unsafe_allow_html=True)
 
-_font_import = ("@import url('" + FONT_IMPORT_URL + "');") if FONT_IMPORT_URL else ""
+_font_import = ("@import url('" + FONT_IMPORT_URL + "');" ) if FONT_IMPORT_URL else ""
 
 _css_parts = [
     "<style>",
@@ -249,6 +250,7 @@ elif st.session_state.page == "tiebreak":
     tied       = st.session_state.tied_chars
     valid_tied = [c for c in tied if c in TIEBREAK_QUESTION]
 
+    # 유효 캐릭터 0~1명이면 추가 질문 없이 확정
     if len(valid_tied) <= 1:
         finalize(valid_tied[0] if valid_tied else tied[0])
         st.rerun()
@@ -291,25 +293,25 @@ elif st.session_state.page == "result":
     st.markdown("<div class='big-title'>🎉 결과 발표!</div>", unsafe_allow_html=True)
     st.write("")
 
-    # 결과 캐릭터 이미지
-    img_path = f"result_page/{character}.png"
+    # 결과 캐릭터 이미지 (루피.png / 크롱.png / 에디.png / 뽀로로.png / 포비.png)
+    img_path = f"result_page{character}.png"
     if os.path.exists(img_path):
         show_image(img_path)
     else:
-        st.info(f"📁 이미지 파일 미등록: result_page/{character}.png")
+        st.info(f"📁 이미지 파일 미등록: {character}.png")
 
     st.markdown(
-        f"<div class='res-char'>당신은 <span style='color:#1A7FD4'>{character}</span>입니다!</div>",
+        f"<div class='res-char'>당신은 <span style='color:#3355ff'>{character}</span>입니다!</div>",
         unsafe_allow_html=True
     )
     st.write("")
 
-    # 참여 통계
+    # 참여 통계 — 비율만 표시 (인원수 제거)
     count = counts.get(character, 0)
     pct   = round(count / total * 100, 1) if total > 0 else 0.0
     st.markdown(f"""
     <div class='stat-box'>
-        <div style='font-size:1rem;color:#444;margin-bottom:0.4rem'>지금까지 이 테스트에 참여한 인원</div>
+        <div style='font-size:1rem;color:#444;margin-bottom:.4rem'>지금까지 이 테스트에 참여한 인원</div>
         <div class='stat-pct'><b>{pct}%</b> 의 인원이 <b>{character}</b> 를 선택했습니다.</div>
     </div>
     """, unsafe_allow_html=True)

@@ -164,8 +164,8 @@ st.markdown("""
 # ══════════════════════════════════════════
 if st.session_state.page == "home":
 
-    st.markdown("<div class='big-title'>당신은 어떤 뽀로로입니까?</div>", unsafe_allow_html=True)
-    st.markdown("<div class='sub-title'>팀플 빌런즈 : 눈 속 마을 빌런 테스트</div>", unsafe_allow_html=True)
+    st.markdown("<div class='big-title'>팀플 빌런즈</div>", unsafe_allow_html=True)
+    st.markdown("<div class='sub-title' 눈 속 마을 빌런 테스트</div>", unsafe_allow_html=True)
 
     if os.path.exists("단체컷.png"):
         st.image("단체컷.png", use_container_width=True)
@@ -277,7 +277,7 @@ elif st.session_state.page == "tiebreak":
     )
     st.markdown(
         f"<div style='text-align:center'>"
-        f"<span class='tie-badge'>⚖️ {tied_str} 동점! 마지막 질문</span>"
+        f"<span class='tie-badge'>⚖️ 두구두구! 마지막 질문</span>"
         f"</div>",
         unsafe_allow_html=True
     )

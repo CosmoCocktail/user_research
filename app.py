@@ -296,7 +296,7 @@ elif st.session_state.page == "result":
     st.write("")
 
     # 결과 캐릭터 이미지
-    img_path = f"{character}.png"
+    img_path = f"result_page/{character}.png"
     if os.path.exists(img_path):
         show_image(img_path)
     else:

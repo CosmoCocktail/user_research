@@ -165,7 +165,7 @@ st.markdown("""
 if st.session_state.page == "home":
 
     st.markdown("<div class='big-title'>팀플 빌런즈</div>", unsafe_allow_html=True)
-    st.markdown("<div class='sub-title' 눈 속 마을 빌런 테스트</div>", unsafe_allow_html=True)
+    st.markdown("<div class='sub-title'> 눈 속 마을 빌런 테스트</div>", unsafe_allow_html=True)
 
     if os.path.exists("단체컷.png"):
         st.image("단체컷.png", use_container_width=True)
